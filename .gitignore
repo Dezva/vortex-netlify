@@ -1,0 +1,15 @@
+# Secretos y configuracion local
+.env
+.env.*
+!.env.example
+
+# Dependencias y archivos temporales
+node_modules/
+.netlify/
+.npm/
+*.log
+
+# Herramientas y sistema operativo
+.DS_Store
+Thumbs.db
+.vscode/
