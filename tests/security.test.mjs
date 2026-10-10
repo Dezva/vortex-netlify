@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { randomBytes } from 'node:crypto';
 import { envSecret, equalsSecret, newSession, verifySession, safeNext, sameOrigin, sessionCookie } from '../netlify/functions/lib/security.mjs';
 import {formatPrice, presaleAvailable, eventAvailable, shortDate} from '../netlify/functions/lib/settings.mjs';
 
@@ -53,8 +54,10 @@ test('Netlify dev: permite formularios legítimos detrás de proxy sin relajar p
 test('contraseña administrativa corta permitida en pruebas (no vacía)',()=>{
   const prev = process.env.VORTEX_ADMIN_PASSWORD;
   try {
-    process.env.VORTEX_ADMIN_PASSWORD='bebota7';
-    assert.equal(envSecret('VORTEX_ADMIN_PASSWORD',1),'bebota7');
+    // Usar un valor de prueba generado al ejecutar el test, nunca una contraseña real.
+    const clavePrueba = randomBytes(5).toString('base64url').slice(0,7);
+    process.env.VORTEX_ADMIN_PASSWORD = clavePrueba;
+    assert.equal(envSecret('VORTEX_ADMIN_PASSWORD',1),clavePrueba);
     process.env.VORTEX_ADMIN_PASSWORD='';
     assert.throws(()=>envSecret('VORTEX_ADMIN_PASSWORD',1));
   } finally {
